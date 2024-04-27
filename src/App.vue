@@ -1,23 +1,23 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
-
+<script setup lang="ts">
+import { ref } from 'vue'
 import UserData from '@/components/UserData.vue'
+import { useUserData } from '@/composables/UseUserData'
 
-export default defineComponent({
-  name: "App",
-  components: {
-    UserData
-  },
-  data: () => ({
-    // Let's pretend this comes from auth
-    userId: 1
-  })
-})
+// Let's pretend this comes from auth
+const userId = ref(1)
 
+const { setUserId } = useUserData()
+
+setUserId(userId.value)
 </script>
 
 <template>
-  <main class="container py-4 mx-auto">
-    <UserData :userId="userId" />
-  </main>
+  <Suspense>
+    <main class="container p-4 mx-auto">
+      <UserData />
+    </main>
+    <template #fallback>
+      Loading...
+    </template>
+  </Suspense>
 </template>
