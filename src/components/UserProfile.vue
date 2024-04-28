@@ -1,34 +1,10 @@
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { useState } from '@/composables/UseState';
 import UserTodos from '@/components/UserTodos.vue';
-import { flatObject } from '@/utils/flatObject.util'
-import type { UserProfile, FlatObject } from '@/interfaces'
 
-const props = defineProps<{
-    userId: number
-}>()
+const { user, fetchUserProfile } = useState()
 
-const emit = defineEmits(['update:user:name', 'update:todos:completed'])
-
-const user = ref<FlatObject>({})
-
-async function fetchUserPosts() {
-    try {
-        const response = await fetch(`https://jsonplaceholder.typicode.com/users/${props.userId}`)
-        const data: UserProfile = await response.json()
-        user.value = flatObject(data)
-    } catch (error) { console.error(error) }
-}
-
-function updateCompletedTodos(completedTodos: number) {
-    emit('update:todos:completed', completedTodos)
-}
-
-await fetchUserPosts()
-
-watch(() => user.value.name, async (name) => {
-    emit('update:user:name', name)
-}, { immediate: true })
+await fetchUserProfile()
 </script>
 
 <template>
@@ -44,5 +20,5 @@ watch(() => user.value.name, async (name) => {
             </label>
         </template>
     </div>
-    <UserTodos :user-id="userId" @update:todos:completed="updateCompletedTodos" />
+    <UserTodos />
 </template>
