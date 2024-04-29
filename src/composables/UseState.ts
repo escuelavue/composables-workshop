@@ -7,6 +7,8 @@ import { computed, ref } from 'vue'
 import type { UserTodo, UserProfile, FlatObject } from '@/interfaces'
 import { flatObject } from '@/utils/flatObject.util'
 
+import { useAsync } from '@/composables/UseAsync'
+
 const userId = ref<number | null>(null)
 const user = ref<FlatObject>({})
 const todos = ref<UserTodo[]>([])
@@ -21,19 +23,13 @@ export function useState() {
     }
 
     async function fetchUserProfile() {
-        try {
-            const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId.value}`)
-            const data: UserProfile = await response.json()
-            user.value = flatObject(data)
-        } catch (error) { console.error(error) }
+        const { result } = await useAsync<UserProfile>(async () => (await (fetch(`https://jsonplaceholder.typicode.com/users/${userId.value}`))).json())
+        if (result.value) user.value = flatObject(result.value)
     }
 
     async function fetchTodos() {
-        try {
-            const response = await fetch(`https://jsonplaceholder.typicode.com/todos/`)
-            const data: UserTodo[] = await response.json()
-            todos.value = data
-        } catch (error) { console.error(error) }
+        const { result } = await useAsync<UserTodo[]>(async () => (await (fetch('https://jsonplaceholder.typicode.com/todos/'))).json())
+        if (result.value) todos.value = result.value
     }
 
     function toggleTodoStatus(todoId: number) {
@@ -51,6 +47,6 @@ export function useState() {
         todos: userTodos,
         completedTodos,
         user,
-        userName: computed(() => user.value.name)
+        userName: computed(() => user.value.name),
     }
 }

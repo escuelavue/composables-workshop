@@ -117,19 +117,4 @@ describe('useState', () => {
 
         expect(userName.value).toBe('Juan')
     })
-    it('should console.log error when fetch fails', async () => {
-        const error = new Error('Failed to fetch')
-
-        spyFetch.mockRejectedValueOnce(error)
-
-        const consoleSpy = vi.spyOn(console, 'error')
-
-        const { fetchUserProfile } = useState()
-
-        await fetchUserProfile()
-
-        expect(consoleSpy).toHaveBeenCalledWith(error)
-
-        consoleSpy.mockRestore()
-    })
 })
