@@ -1,23 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
+
+import { useIntersectionObserver } from '@/composables/UseIntersectionObserver';
 
 const ad = ref(null);
 
-const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            emit('ad:visible', { name: 'Blogpost Ad', when: new Date().toISOString() });
-        }
-    });
-})
-
-const emit = defineEmits(['ad:visible']);
-
-onMounted(() => {
-    if (ad.value) {
-        observer.observe(ad.value);
-    }
-})
+useIntersectionObserver(ad, { name: 'Blogpost Ad', log: true })
 </script>
 
 <template>
