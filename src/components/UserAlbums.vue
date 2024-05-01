@@ -1,7 +1,17 @@
-<script setup lang="ts">
-import { useUserData } from '@/composables/UseUserData'
+<script lang="ts">
+import { defineComponent, type DeepReadonly } from 'vue';
 
-const { albums } = useUserData()
+import type { UserAlbum } from '@/interfaces';
+
+export default defineComponent({
+    name: 'UserAlbums',
+    props: {
+        albums: {
+            type: Array as () => DeepReadonly<UserAlbum[]>,
+            required: true
+        }
+    }
+})
 </script>
 
 <template>

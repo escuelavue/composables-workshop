@@ -4,7 +4,7 @@ import UserPosts from '@/components/UserPosts.vue'
 
 import { useUserData } from '@/composables/UseUserData'
 
-const { fetchPosts, fetchAlbums } = useUserData()
+const { fetchPosts, fetchAlbums, posts, albums } = useUserData()
 
 await fetchPosts()
 await fetchAlbums()
@@ -17,10 +17,10 @@ await fetchAlbums()
     <hr class="mb-6">
     <div class="md:gap-4 md:flex">
         <div class="mb-12 lg:mb-0 basis-1/3">
-            <UserAlbums />
+            <UserAlbums :albums="albums" />
         </div>
         <div class="mb-12 lg:mb-0 basis-2/3">
-            <UserPosts />
+            <UserPosts :posts="posts" />
         </div>
     </div>
 </template>

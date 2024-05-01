@@ -1,14 +1,24 @@
-<script setup lang="ts">
-import { useUserData } from '@/composables/UseUserData'
+<script lang="ts">
+import { defineComponent, type DeepReadonly } from 'vue';
 
-const { posts } = useUserData()
+import type { UserPost } from '@/interfaces';
+
+export default defineComponent({
+    name: 'UserPosts',
+    props: {
+        posts: {
+            type: Array as () => DeepReadonly<UserPost[]>,
+            required: true
+        }
+    }
+})
 </script>
 
 <template>
     <h2 class="mb-4 text-2xl font-bold">Posts</h2>
 
     <div class="flex flex-wrap gap-4">
-        <div v-for="post in posts" :key="post.id" class="shadow-xl card basis-64 grow">
+        <div v-for="post in posts" :key="post.id" class="shadow-xl card basis-64">
             <div class="card-body">
                 <h2 class="card-title">{{ post.title }}</h2>
                 <p>{{ post.body }}</p>
